@@ -7,7 +7,7 @@
   
 {% endif %}
 <form method="post">
-  <a href="{{ url_for('view_venues', org_id=org_id or venue.OrganizationId) }}">Back to Venues</a>
+  <a href="{{ url_for('venue.view_venues', org_id=org_id or venue.OrganizationId) }}">Back to Venues</a>
   <!-- Ensure organization ID is passed through -->
   <input type="hidden" name="org_id" value="{{ org_id or venue.OrganizationId }}">
 
@@ -42,11 +42,11 @@
       <td>{{ s.Description }}</td>
       <td>{{ 'Yes' if s.IsActive else 'No' }}</td>
       <td>
-        <form method="get" action="{{ url_for('edit_site', site_id=s.Id) }}" style="display:inline;">
+        <form method="get" action="{{ url_for('site.edit_site', site_id=s.Id) }}" style="display:inline;">
           <button type="submit">Edit</button>
         </form>
         {% if s.IsActive %}
-        <form method="post" action="{{ url_for('disable_site', site_id=s.Id) }}" style="display:inline;">
+        <form method="post" action="{{ url_for('site.disable_site', site_id=s.Id) }}" style="display:inline;">
           <button type="submit">Disable</button>
         </form>
         {% endif %}
@@ -57,7 +57,7 @@
 {% endif %}
 <br>
   <h4>Add New Site</h4>
-  <form method="post" action="{{ url_for('add_site') }}">
+  <form method="post" action="{{ url_for('site.add_site') }}">
     <input type="hidden" name="venue_id" value="{{ venue.Id }}">
     
     <label>Site Name:</label><br>

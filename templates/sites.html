@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Sites for {{ org_name }} - {{ venue_name }}</h2>
+
+<a href="{{ url_for('venue.edit_venue', venue_id=venue_id) }}">← Back to Venue</a>
+
+<hr>
+
+<h3>Add a New Site</h3>
+<form method="post" action="{{ url_for('site.add_site') }}">
+  <input type="hidden" name="venue_id" value="{{ venue_id }}">
+  <label for="site_name">Site Name:</label><br>
+  <input type="text" name="site_name" required><br>
+  
+  <label for="description">Description:</label><br>
+  <input type="text" name="description"><br>
+
+  <button type="submit">Add Site</button>
+</form>
+
+<hr>
+
+<h3>Existing Sites</h3>
+{% if sites %}
+  <ul>
+    {% for site in sites %}
+      <li>
+        <strong>{{ site.SiteName }}</strong>
+        {% if not site.IsActive %}<span style="color:red;">(Inactive)</span>{% endif %}<br>
+        {{ site.Description or "No description" }}<br>
+
+        <form method="post" action="{{ url_for('site.disable_site', site_id=site.id) }}" style="display:inline;">
+          <button type="submit">
+            {% if site.IsActive %}Disable{% else %}Enable{% endif %}
+          </button>
+        </form>
+
+        <a href="{{ url_for('site.edit_site', site_id=site.id) }}">Edit</a> |
+        <a href="{{ url_for('menus.manage_menus', site_id=site.id) }}">Manage Menus</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No sites found.</p>
+{% endif %}
+
+{% endblock %}

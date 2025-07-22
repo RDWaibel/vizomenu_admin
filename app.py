@@ -4,10 +4,12 @@ import jwt
 from datetime import datetime, timedelta
 from email_helper import send_login_notification
 
-from site_routes import site_bp
+from sites_routes import site_bp
 from venue_routes import venue_bp
+from auth_utils import require_login_globally
 
 app = Flask(__name__)
+
 app.secret_key = "R0bV1z0M3nuAPI2025!SecureKeyXtra" 
 app.permanent_session_lifetime = timedelta(minutes=60)
 def make_session_permanent():
@@ -15,27 +17,19 @@ def make_session_permanent():
 app.register_blueprint(site_bp)
 app.register_blueprint(venue_bp)
 
+
+
 # 🔧 Replace this with your actual Function App base URL
 API_BASE = "http://localhost:7231/api"
 
 from functools import wraps
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user' not in session:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
 @app.route('/')
-@login_required
 def home():
     print("Session user:", session.get("user"))
     return render_template("home.html")
 
 @app.route('/organizations', endpoint='list_organizations')
-@login_required
 def list_organizations():
     try:
         headers = {"Authorization": f"Bearer {session['token']}"}
@@ -49,7 +43,6 @@ def list_organizations():
     return render_template("organizations.html", organizations=organizations)
 
 @app.route('/organizations/add', methods=['GET', 'POST'])
-@login_required
 def add_organization():
     if 'token' not in session:
         flash("Please log in as SuperAdmin to continue.", "warning")
@@ -84,7 +77,6 @@ def add_organization():
     return render_template("add_organization.html")
 
 @app.route('/organizations/edit/<org_id>', methods=['GET', 'POST'])
-@login_required
 def edit_organization(org_id):
     if 'token' not in session:
         flash("Please log in as SuperAdmin to continue.", "warning")
@@ -165,18 +157,8 @@ def logout():
     flash("You have been logged out.", "info")
     return redirect(url_for('login'))
 
-#Venues Management
+app.before_request(require_login_globally)   
 
-
-
-
-
-@app.before_request
-def require_login():
-    allowed_routes = ['login', 'static']  # Static = CSS, JS, etc.
-    if request.endpoint not in allowed_routes and 'user' not in session:
-        return redirect(url_for('login'))
-    
 if __name__ == "__main__":
     app.run(debug=True)
 

@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 import requests
-from flask_login import login_required
+from auth_utils import require_login
 
 venue_bp = Blueprint("venue", __name__)
 API_BASE = "http://localhost:7231/api"
 
 @venue_bp.route('/venues/<org_id>')
-@login_required
 def view_venues(org_id):
     token = session.get("token")
     headers = {"Authorization": f"Bearer {token}"}
@@ -23,7 +22,6 @@ def view_venues(org_id):
     return render_template("venues.html", venues=venues, org_id=org_id, org_name=org_name)
 
 @venue_bp.route('/venues/<org_id>/add', methods=["GET", "POST"])
-@login_required
 def add_venue(org_id):
     token = session.get("token")
     headers = {"Authorization": f"Bearer {token}"}
@@ -35,7 +33,7 @@ def add_venue(org_id):
             "EnteredById": session['user']['id']  # ✅ set EnteredById
         }    
         requests.post(f"{API_BASE}/organization/{org_id}/venues", json=data, headers=headers)
-        return redirect(url_for("view_venues", org_id=org_id))
+        return redirect(url_for("venue.view_venues", org_id=org_id))
     
     org_name = "Organization"
     res = requests.get(f"{API_BASE}/organizations/{org_id}", headers=headers)
@@ -50,7 +48,6 @@ def test_venues():
     return "Venues route working"
 
 @venue_bp.route('/venues/edit/<venue_id>', methods=["GET", "POST"])
-@login_required
 def edit_venue(venue_id):
     token = session.get("token")
     headers = {"Authorization": f"Bearer {token}"}
@@ -62,7 +59,7 @@ def edit_venue(venue_id):
         }
         org_id = request.form["org_id"]
         requests.put(f"{API_BASE}/venues/{venue_id}", json=data, headers=headers)
-        return redirect(url_for("view_venues", org_id=org_id))
+        return redirect(url_for("venue.view_venues", org_id=org_id))
 
     # GET venue info
     res = requests.get(f"{API_BASE}/venue/{venue_id}", headers=headers)
@@ -85,7 +82,6 @@ def edit_venue(venue_id):
 
 
 @venue_bp.route('/venues/<venue_id>/copy', methods=["POST"])
-@login_required
 def copy_venue(venue_id):
     new_name = request.form["new_name"]
     data = {"VenueName": new_name}
@@ -94,7 +90,6 @@ def copy_venue(venue_id):
     return redirect(request.referrer)
 
 @venue_bp.route('/venues/<venue_id>/hours', methods=["GET", "POST"])
-@login_required
 def manage_hours(venue_id):
     token = session.get("token")
     headers = {"Authorization": f"Bearer {token}"}
@@ -131,3 +126,4 @@ def manage_hours(venue_id):
         org_id=org_id,
         day_labels=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     )
+
