@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Hours for {{ venue_name }}</h2>
+<form method="POST">
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Open Time</th>
+            <th>Close Time</th>
+            <th>Closed</th>
+        </tr>
+        {% for hour in hours %}
+        <tr>
+            <td>{{ day_labels[loop.index0] }}</td>
+            <td><input type="time" name="open_{{ loop.index0 }}" value="{{ hour.openTime or '' }}"></td>
+            <td><input type="time" name="close_{{ loop.index0 }}" value="{{ hour.closeTime or '' }}"></td>
+            <td><input type="checkbox" name="closed_{{ loop.index0 }}" {% if hour.isClosed %}checked{% endif %}></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="hidden" name="venue_name" value="{{ venue_name }}">
+    <button type="submit">Save Hours</button>
+</form>
+<a href="{{ url_for('view_venues', org_id=org_id) }}">Back to Venues</a>
+{% endblock %}

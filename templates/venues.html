@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<table>
+  <tr>
+    <td colspan="5">
+      <h2>Venues for {{ org_name }}</h2>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="5">
+      <a href="{{ url_for('add_venue', org_id=org_id) }}">Add Venue</a>
+    </td>
+  </tr>
+  <tr>
+    <th>Venue Name</th>
+    <th>Location</th>
+    <th>24 Hours</th>
+    <th colspan="2">Actions</th>
+  </tr>
+  {% for v in venues %}
+  <tr>
+    <td>{{ v.VenueName }}</td>
+    <td>{{ v.Location }}</td>
+    <td>{% if v.Is24Hours %}Yes{% else %}No{% endif %}</td>
+    <td>
+      <form method="get" action="{{ url_for('edit_venue', venue_id=v.Id) }}" style="display:inline;">
+        <button type="submit">Edit</button>
+      </form>
+
+      <form method="get" action="{{ url_for('manage_hours', venue_id=v.Id, org_id=org_id) }}" style="display:inline;">
+        <button type="submit">Manage Hours</button>
+      </form>
+    </td>
+    <td>
+      <form method="post" action="{{ url_for('copy_venue', venue_id=v.id) }}" style="display:inline;">
+        <input type="text" name="new_name" placeholder="Copy as..." required>
+        <button type="submit">Copy</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% if not venues %}
+<p>No venues found for this organization.</p>
+{% endif %}
+
+
+<a href="{{ url_for('list_organizations') }}">Back to Organizations</a>
+{% endblock %}

@@ -1,0 +1,55 @@
+body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #FF6F00; /* Hugger Orange */
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .sidebar a {
+      display: block;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: white;
+      color: #FF6F00;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    .sidebar a:hover {
+      background-color: #ffe0b2;
+    }
+
+    .main-content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    .topbar {
+        height: 30px;
+        background-color: #FF6F00;
+        color: white;
+        padding: 5px 15px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+    
+button {
+  margin-right: 5px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+input[type="text"] {
+  margin-right: 5px;
+}

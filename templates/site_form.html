@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Site: {{ site.SiteName }}</h2>
+
+<form method="post">
+  <input type="hidden" name="venue_id" value="{{ site.VenueId }}">
+
+  <label>Site Name:</label><br>
+  <input type="text" name="site_name" value="{{ site.SiteName }}" required><br>
+
+  <label>Description:</label><br>
+  <input type="text" name="description" value="{{ site.Description }}"><br><br>
+
+  <button type="submit">Save Changes</button>
+</form>
+
+<a href="{{ url_for('edit_venue', venue_id=site.VenueId) }}">Back to Venue</a>
+{% endblock %}

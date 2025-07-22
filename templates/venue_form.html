@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ 'Edit Venue' if venue else 'Add Venue' }} for {{ org_name }}</h2>
+{% if venue %}
+  <input type="hidden" name="venue_id" value="{{ venue.Id }}">
+  
+{% endif %}
+<form method="post">
+  <a href="{{ url_for('view_venues', org_id=org_id or venue.OrganizationId) }}">Back to Venues</a>
+  <!-- Ensure organization ID is passed through -->
+  <input type="hidden" name="org_id" value="{{ org_id or venue.OrganizationId }}">
+
+  <label for="venueName">Venue Name:</label><br>
+  <input type="text" id="venueName" name="name" value="{{ venue.VenueName if venue else '' }}" required><br><br>
+
+  <label for="location">Location:</label><br>
+  <input type="text" id="location" name="location" value="{{ venue.Location if venue else '' }}"><br><br>
+
+  <label>
+    <input type="checkbox" name="is24" {% if venue and venue.Is24Hours %}checked{% endif %}>
+    24 Hours
+  </label><br><br>
+
+  <button type="submit">Save Venue</button>
+</form>
+
+<br>
+
+{% if sites %}
+  <h3>Sites</h3>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+    {% for s in sites %}
+    <tr>
+      <td>{{ s.SiteName }}</td>
+      <td>{{ s.Description }}</td>
+      <td>{{ 'Yes' if s.IsActive else 'No' }}</td>
+      <td>
+        <form method="get" action="{{ url_for('edit_site', site_id=s.Id) }}" style="display:inline;">
+          <button type="submit">Edit</button>
+        </form>
+        {% if s.IsActive %}
+        <form method="post" action="{{ url_for('disable_site', site_id=s.Id) }}" style="display:inline;">
+          <button type="submit">Disable</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+<br>
+  <h4>Add New Site</h4>
+  <form method="post" action="{{ url_for('add_site') }}">
+    <input type="hidden" name="venue_id" value="{{ venue.Id }}">
+    
+    <label>Site Name:</label><br>
+    <input type="text" name="site_name" required><br>
+
+    <label>Description:</label><br>
+    <input type="text" name="description"><br><br>
+
+    <button type="submit">Add Site</button>
+  </form>
+
+{% endblock %}

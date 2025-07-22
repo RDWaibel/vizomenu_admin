@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>New Organization</h2>
+<form method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Address:</label><br>
+    <input type="text" name="address"><br>
+    <input type="text" name="city" placeholder="City">
+    <input type="text" name="state" placeholder="State">
+    <input type="text" name="zipCode" placeholder="Zip Code"><br><br>
+
+    <label>Contact Phone:</label><br>
+    <input type="text" name="contactPhone"><br>
+
+    <label>Contact Email:</label><br>
+    <input type="email" name="contactEmail"><br><br>
+
+    <button type="submit">Add Organization</button>
+</form>
+<a href="{{ url_for('list_organizations') }}">Back to list</a>
+{% endblock %}

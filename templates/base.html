@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>VizoMenu Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="sidebar">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('list_organizations') }}">Organizations</a>
+  </div>
+  <div class="main-content">
+    <div class="topbar" style="justify-content: space-between;">
+  <div><h3>VizoMenu Admin Panel</h3></div>
+  <div>
+    {% if session.get('user') %}
+      Welcome, {{ session['user']['firstName'] }} |
+      <a href="{{ url_for('logout') }}" style="color:white; text-decoration:underline;">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}" style="color:white; text-decoration:underline;">Login</a>
+    {% endif %}
+    </div>
+  </div>
+
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
