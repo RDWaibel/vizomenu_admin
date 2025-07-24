@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Menus for {{ site.SiteName }}</h2>
+
+<a href="{{ url_for('venue.import_menus_for_site', site_id=site.id) }}">Import Menu</a>
+<a href="{{ url_for('venue.add_menu', site_id=site.id) }}">Add New Menu</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Menu Name</th>
+            <th>Display Text</th>
+            <th>Sort Order</th>
+            <th>Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for menu in menus %}
+        <tr>
+            <td>{{ menu.MenuName }}</td>
+            <td>{{ menu.DisplayText }}</td>
+            <td>{{ menu.SortOrder }}</td>
+            <td>{{ "Yes" if menu.IsActive else "No" }}</td>
+            <td><a href="{{ url_for('venue.edit_menu', menu_id=menu.id) }}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
