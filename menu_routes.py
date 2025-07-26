@@ -49,27 +49,4 @@ def import_menus_for_site(site_id):
 
     return render_template("menu_import.html", site_id=site_id)
 
-    if request.method == "POST":
-        file = request.files.get("csv_file")
-        if not file:
-            flash("No file uploaded", "error")
-            return redirect(url_for("venue.import_menus"))
-
-        headers = {
-            "Authorization": f"Bearer {session.get('token')}"
-        }
-
-        res = requests.post(
-            f"{API_BASE}/menus/import",
-            headers=headers,
-            data=file.read().decode("utf-8")
-        )
-
-        if res.ok:
-            flash("Menus imported successfully.", "success")
-        else:
-            flash(f"Failed to import menus.<br>{res.text}", "error")
-
-        return redirect(url_for("venue.import_menus"))
-
-    return render_template("import_menus.html")
+    

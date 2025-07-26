@@ -24,16 +24,16 @@
         <tr>
             <td>{{ site.SiteName }}</td>
             <td>{{ site.Description }}</td>
-            <td>{{ site.menuCount }}</td>
+            <td>{{ site.MenuCount }}</td>
             <td>{{ '✅' if site.isActive else '❌' }}</td>
             <td>
-                <a href="{{ url_for('site.edit_site', site_id=site.id) }}">✎</a>
-                <form action="{{ url_for('site.disable_site', site_id=site.id) }}" method="post" style="display:inline;">
+                <div class="d-flex gap-2">
+                <form action="{{ url_for('site.disable_site', site_id=site.Id) }}" method="post" style="display:inline;">
                     <button type="submit" title="Disable">🗑</button>
                 </form>
-
-                <a href="{{ url_for('menu.manage_menus', site_id=site.id) }}" class="btn btn-primary btn-sm">Menus</a>
-
+                <a href="{{ url_for('site.edit_site', site_id=site.Id) }}">✎ Edit</a>
+                <a href="{{ url_for('menu.manage_menus', site_id=site.Id) }}" class="btn btn-primary btn-sm">Menus</a>
+                </div>
             </td>
         </tr>
     {% endfor %}

@@ -6,6 +6,9 @@ from email_helper import send_login_notification
 
 from sites_routes import site_bp
 from venue_routes import venue_bp
+from menu_routes import menu_bp
+
+from config import API_BASE
 from auth_utils import require_login_globally
 
 app = Flask(__name__)
@@ -16,11 +19,8 @@ def make_session_permanent():
     session.permanent = True
 app.register_blueprint(site_bp)
 app.register_blueprint(venue_bp)
+app.register_blueprint(menu_bp)
 
-
-
-# 🔧 Replace this with your actual Function App base URL
-API_BASE = "http://localhost:7231/api"
 
 from functools import wraps
 
